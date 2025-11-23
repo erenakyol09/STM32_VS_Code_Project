@@ -59,7 +59,7 @@ static void MPU_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint8_t demoVal = 0;
 /* USER CODE END 0 */
 
 /**
@@ -106,7 +106,8 @@ int main(void)
   while (1)
   {
     HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin); 
-    HAL_Delay(500);
+    HAL_Delay(1000);
+    demoVal++;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
