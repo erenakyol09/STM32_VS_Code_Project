@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "eth.h"
+#include "stm32f7xx_hal_gpio.h"
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
@@ -104,6 +105,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin); 
+    HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
