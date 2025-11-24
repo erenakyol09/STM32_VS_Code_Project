@@ -23,7 +23,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "main.h"
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,12 +44,20 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
+#define AZURE_TASK_STACK_SIZE    1024U    /* bytes */
+#define AZURE_TASK_PRIORITY      10U
 
+static TX_THREAD azureTask;
+static void azureTaskEntry(ULONG thread_input);
+static void *azureTaskStackPtr = TX_NULL;
+
+/* Fallback static stack buffer used when byte pool allocation fails */
+static uint8_t azureTaskStackStatic[AZURE_TASK_STACK_SIZE];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
-
+static void azureTaskEntry(ULONG thread_input);
 /* USER CODE END PFP */
 
 /**
@@ -66,7 +75,46 @@ UINT App_ThreadX_Init(VOID *memory_ptr)
   /* USER CODE END App_ThreadX_MEM_POOL */
 
   /* USER CODE BEGIN App_ThreadX_Init */
+  {
+      UINT status;
 
+      /* Attempt to allocate stack memory for the Azure task from the provided byte pool */
+      status = tx_byte_allocate(byte_pool, &azureTaskStackPtr, AZURE_TASK_STACK_SIZE, TX_NO_WAIT);
+      if (status != TX_SUCCESS)
+      {
+          if (status == TX_NO_MEMORY)
+          {
+              /* Use fallback static buffer when the byte pool is out of memory */
+              azureTaskStackPtr = azureTaskStackStatic;
+              /* Optional: clear fallback stack for deterministic startup */
+              memset(azureTaskStackPtr, 0, AZURE_TASK_STACK_SIZE);
+          }
+          else
+          {
+              /* For other errors, propagate failure */
+              ret = status;
+              return ret;
+          }
+      }
+
+      /* Create and auto-start the Azure task.
+         The task performs periodic work; adjust sleep period if tick rate differs. */
+      status = tx_thread_create(&azureTask,
+                                "AzureTask",
+                                azureTaskEntry,
+                                0,
+                                azureTaskStackPtr,
+                                AZURE_TASK_STACK_SIZE,
+                                AZURE_TASK_PRIORITY,
+                                AZURE_TASK_PRIORITY,
+                                TX_NO_TIME_SLICE,
+                                TX_AUTO_START);
+      if (status != TX_SUCCESS)
+      {
+          ret = status;
+          return ret;
+      }
+  }
   /* USER CODE END App_ThreadX_Init */
 
   return ret;
@@ -91,5 +139,16 @@ void MX_ThreadX_Init(void)
 }
 
 /* USER CODE BEGIN 1 */
+static void azureTaskEntry(ULONG thread_input)
+{
+    (void)thread_input;
 
+    while (1)
+    {
+        HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin); 
+        /* Periodic work placeholder (1 ms period).
+           Replace or extend this section with actual task logic. */
+        tx_thread_sleep(100); /* one second*/
+    }
+}
 /* USER CODE END 1 */
