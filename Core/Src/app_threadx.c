@@ -148,7 +148,7 @@ static void azureTaskEntry(ULONG thread_input)
         HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin); 
         /* Periodic work placeholder (1 ms period).
            Replace or extend this section with actual task logic. */
-        tx_thread_sleep(1000); /* Sleep 1 tick (assumes 1 ms tick rate) */
+        tx_thread_sleep(100); /* one second*/
     }
 }
 /* USER CODE END 1 */
