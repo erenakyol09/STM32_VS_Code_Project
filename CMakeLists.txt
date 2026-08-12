@@ -48,7 +48,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Application
     App/Application/Application.cpp
     App/Components/Stm32Led.cpp
-
+    App/Application/ApplicationWrapper.cpp
     # Platform
     Platform/STM32/GPIO/Stm32Gpio.cpp
 )
