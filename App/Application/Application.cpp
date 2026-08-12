@@ -17,7 +17,7 @@ void Application::init()
 {
     led1_.on();
     led2_.off();
-    led3_.off();
+    led3_.on();
 }
 
 void Application::run()

@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "main.h"
 #include <string.h>
+#include "ApplicationWrapper.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -143,12 +144,12 @@ static void azureTaskEntry(ULONG thread_input)
 {
     (void)thread_input;
 
+    App_Init();
+
     while (1)
     {
-        HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin); 
+        App_Run();
         test_val++;
-        /* Periodic work placeholder (1 ms period).
-           Replace or extend this section with actual task logic. */
         tx_thread_sleep(100); /* one second*/
     }
 }
