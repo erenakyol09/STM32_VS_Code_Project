@@ -39,7 +39,7 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+uint32_t test_val = 0;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -146,6 +146,7 @@ static void azureTaskEntry(ULONG thread_input)
     while (1)
     {
         HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin); 
+        test_val++;
         /* Periodic work placeholder (1 ms period).
            Replace or extend this section with actual task logic. */
         tx_thread_sleep(100); /* one second*/
