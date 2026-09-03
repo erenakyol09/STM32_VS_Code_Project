@@ -3,6 +3,8 @@
 Short description
 This is a CMake-based STM32 firmware project targeting the Nucleo-F767ZI board. The project is organized for STM32CubeMX compatibility and VS Code workflows.
 
+USE rm -rf build for the cloning or move location file
+
 Prerequisites
 - STM32CubeMX (for .ioc edits and code regeneration)
 - ARM toolchain (GCC/Clang) and CMake
